@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إلى شهد ❤️</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Cairo', sans-serif;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.overlay {
+  background: rgba(0,0,0,0.55);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+}
+
+.card {
+  background: rgba(255,255,255,0.15);
+  padding: 40px;
+  border-radius: 25px;
+  width: 340px;
+  position: relative;
+}
+
+#text {
+  font-size: 22px;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+}
+
+#yes {
+  background: #fff;
+  color: #e63946;
+  right: 40px;
+  bottom: 40px;
+}
+
+#no {
+  background: #00000070;
+  color: #fff;
+  left: 40px;
+  bottom: 40px;
+}
+
+/* القلوب */
+.heart {
+  position: fixed;
+  top: -20px;
+  color: #ff4d6d;
+  font-size: 24px;
+  animation: fall linear forwards;
+  z-index: -1;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+.hidden {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- فيديو الخلفية -->
+<video autoplay muted loop>
+  <source src="bg.mp4" type="video/mp4">
+</video>
+
+<div class="overlay">
+  <div class="card">
+    <div id="text">تحبيني لو لا؟ 💔</div>
+    <button id="yes">نعم 😳</button>
+    <button id="no">لا 🙄</button>
+  </div>
+</div>
+
+<audio id="voice" src="voice.mp3"></audio>
+
+<script>
+let step = 0;
+
+const text = document.getElementById("text");
+const yes = document.getElementById("yes");
+const no = document.getElementById("no");
+const voice = document.getElementById("voice");
+
+/* الشعر + توقيت كل سطر (اضبطه حسب صوتك بعد التسجيل) */
+const poemTimeline = [
+  { time: 0, line: "شَهْدُ…" },
+  { time: 3, line: "يا فائضَ الحُسنِ الذي" },
+  { time: 7, line: "أربكَ المعاني" },
+  { time: 10, line: "وأتعبَ البلاغةَ" },
+  { time: 14, line: "حين حاولتُ أن أصفكِ" },
+  { time: 18, line: "" },
+  { time: 20, line: "أنا لا أقول أحبكِ" },
+  { time: 24, line: "لأن الحبَّ" },
+  { time: 27, line: "كلمةٌ قصيرة" },
+  { time: 31, line: "لا تسعُ هذا الخراب الجميل" },
+  { time: 36, line: "الذي صنعتِه في قلبي" },
+  { time: 42, line: "" },
+  { time: 44, line: "أنتِ بدايةُ الرجفة" },
+  { time: 48, line: "ونهايتُها" },
+  { time: 51, line: "أنتِ السؤالُ" },
+  { time: 55, line: "حين تعجزُ الإجابة" },
+  { time: 59, line: "والصمتُ" },
+  { time: 62, line: "حين يخونُ الكلام" },
+  { time: 67, line: "" },
+  { time: 69, line: "أحبكِ حُبًّا" },
+  { time: 73, line: "لو أُلقيَ على الجبالِ" },
+  { time: 78, line: "لانحنت" },
+  { time: 83, line: "" },
+  { time: 85, line: "شهدُ…" },
+  { time: 88, line: "أنا رجلٌ" },
+  { time: 91, line: "كلما ناداكِ" },
+  { time: 95, line: "نسيَ اسمه" },
+  { time: 100, line: "" },
+  { time: 102, line: "أعشقكِ" },
+  { time: 105, line: "عشقَ من لا يطلبُ نجاة" },
+  { time: 110, line: "ولا يفاوضُ على قلبه" },
+  { time: 116, line: "" },
+  { time: 118, line: "إن قالوا لي: ما الوطن؟" },
+  { time: 123, line: "قلتُ: شهد" },
+  { time: 128, line: "" },
+  { time: 130, line: "وإن غبتِ" },
+  { time: 134, line: "اختلَّ اتجاهُ الزمن" },
+  { time: 139, line: "وإن حضرتِ" },
+  { time: 143, line: "صار الكونُ" },
+  { time: 147, line: "أصغر من كفّيكِ 🤍" }
+];
+
+no.addEventListener("mouseover", () => {
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 200 - 100;
+  no.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+yes.addEventListener("click", () => {
+  step++;
+
+  if (step === 1) text.innerText = "متأكدة؟ 😌";
+  else if (step === 2) text.innerText = "صدك تحبيني؟";
+  else if (step === 3) text.innerText = "زين… تعشقيني؟ ❤️";
+  else {
+    yes.style.display = "none";
+    no.style.display = "none";
+    text.innerText = "";
+    voice.play();
+    startHearts();
+    playPoemWithAudio();
+  }
+});
+
+function playPoemWithAudio() {
+  poemTimeline.forEach(item => {
+    setTimeout(() => {
+      text.innerText += item.line + "\n";
+    }, item.time * 1000);
+  });
+}
+
+function startHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }, 300);
+}
+</script>
+
+</body>
+</html>
