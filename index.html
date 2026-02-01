@@ -3,75 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <title>إلى شهد ❤️</title>
-
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Cairo', sans-serif;
-}
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo', sans-serif; }
 
 body {
   height: 100vh;
   overflow: hidden;
-}
-
-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
-
-.overlay {
-  background: rgba(0,0,0,0.55);
-  height: 100%;
+  background: #ffe0e6; /* وردي */
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
-  text-align: center;
 }
 
 .card {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.25);
   padding: 40px;
   border-radius: 25px;
-  width: 340px;
+  width: 380px;
+  text-align: center;
   position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
 #text {
-  font-size: 22px;
-  line-height: 1.8;
+  font-size: 26px;
+  line-height: 2;
+  margin-bottom: 30px;
   white-space: pre-line;
+  color: #e63946;
 }
 
 button {
   padding: 12px 25px;
-  font-size: 18px;
+  font-size: 20px;
   border-radius: 30px;
   border: none;
   cursor: pointer;
-  position: absolute;
+  margin: 0 20px; /* زيادة المسافة بين الأزرار */
+  transition: transform 0.3s ease; /* حركة سلسة */
 }
 
-#yes {
-  background: #fff;
-  color: #e63946;
-  right: 40px;
-  bottom: 40px;
+#yes { background: #fff; color: #e63946; }
+#no { background: #00000070; color: #fff; }
+
+#video-container {
+  width: 250px;
+  margin: 0 auto 20px;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
-#no {
-  background: #00000070;
-  color: #fff;
-  left: 40px;
-  bottom: 40px;
+#video-container video {
+  width: 100%;
+  display: block;
+  border-radius: 15px;
 }
 
 /* القلوب */
@@ -79,9 +64,9 @@ button {
   position: fixed;
   top: -20px;
   color: #ff4d6d;
-  font-size: 24px;
+  font-size: 28px;
   animation: fall linear forwards;
-  z-index: -1;
+  z-index: 1;
 }
 
 @keyframes fall {
@@ -90,23 +75,21 @@ button {
     opacity: 0;
   }
 }
-
-.hidden {
-  display: none;
-}
 </style>
 </head>
 
 <body>
 
-<!-- فيديو الخلفية -->
-<video autoplay muted loop>
-  <source src="bg.mp4" type="video/mp4">
-</video>
+<div class="card">
 
-<div class="overlay">
-  <div class="card">
-    <div id="text">تحبيني لو لا؟ 💔</div>
+  <div id="video-container">
+    <video autoplay muted loop>
+      <source src="bg.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div id="text">تحبيني لو لا؟ 💔</div>
+  <div>
     <button id="yes">نعم 😳</button>
     <button id="no">لا 🙄</button>
   </div>
@@ -116,13 +99,12 @@ button {
 
 <script>
 let step = 0;
-
 const text = document.getElementById("text");
 const yes = document.getElementById("yes");
 const no = document.getElementById("no");
 const voice = document.getElementById("voice");
 
-/* الشعر + توقيت كل سطر (اضبطه حسب صوتك بعد التسجيل) */
+/* الشعر + توقيت كل سطر */
 const poemTimeline = [
   { time: 0, line: "شَهْدُ…" },
   { time: 3, line: "يا فائضَ الحُسنِ الذي" },
@@ -166,15 +148,15 @@ const poemTimeline = [
   { time: 147, line: "أصغر من كفّيكِ 🤍" }
 ];
 
+/* حركة زر لا */
 no.addEventListener("mouseover", () => {
-  const x = Math.random() * 200 - 100;
-  const y = Math.random() * 200 - 100;
+  const x = Math.random() * 30 - 15; // حركة لطيفة
+  const y = Math.random() * 10 - 5;
   no.style.transform = `translate(${x}px, ${y}px)`;
 });
 
 yes.addEventListener("click", () => {
   step++;
-
   if (step === 1) text.innerText = "متأكدة؟ 😌";
   else if (step === 2) text.innerText = "صدك تحبيني؟";
   else if (step === 3) text.innerText = "زين… تعشقيني؟ ❤️";
@@ -208,6 +190,5 @@ function startHearts() {
   }, 300);
 }
 </script>
-
 </body>
 </html>
